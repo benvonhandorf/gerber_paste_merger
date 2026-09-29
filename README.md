@@ -43,6 +43,14 @@ npm run build     # type-check + production build to dist/
 npm run preview   # serve the production build locally
 ```
 
+## Deployment
+
+Pushing to `main` builds and deploys the site to GitHub Pages via
+`.github/workflows/deploy.yml`. To enable it on a repo: **Settings → Pages →
+Source → GitHub Actions**. The build automatically picks the correct base
+path (`/<repo-name>/`) from `GITHUB_REPOSITORY`, so no manual configuration
+is needed even if the repo is renamed or forked.
+
 ## How it works
 
 - `@tracespace/parser` + `@tracespace/plotter` parse each Gerber file into
