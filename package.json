@@ -12,6 +12,7 @@
     "postinstall": "patch-package"
   },
   "devDependencies": {
+    "@types/clipper-lib": "^6.4.0",
     "patch-package": "^8.0.1",
     "puppeteer-core": "^25.12.0",
     "typescript": "~6.0.2",
@@ -23,6 +24,7 @@
     "@tracespace/parser": "^5.0.0-alpha.0",
     "@tracespace/plotter": "^5.0.0-alpha.0",
     "@tracespace/renderer": "^5.0.0-alpha.0",
+    "clipper-lib": "^6.4.2",
     "fflate": "^0.8.3"
   }
 }

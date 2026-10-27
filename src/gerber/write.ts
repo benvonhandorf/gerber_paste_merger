@@ -107,7 +107,7 @@ function orientLoopsForRegion(loops: PathSegment[][]): PathSegment[][] {
  * plotter represents an aperture hole: one `outline` shape whose `segments`
  * contain an outer loop immediately followed by an inner loop.
  */
-function splitIntoLoops(segments: PathSegment[]): PathSegment[][] {
+export function splitIntoLoops(segments: PathSegment[]): PathSegment[][] {
   const loops: PathSegment[][] = [];
   let current: PathSegment[] = [];
   let prevEnd: Position | null = null;

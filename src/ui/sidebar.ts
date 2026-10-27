@@ -4,6 +4,7 @@ import { designLocalBox, pasteLayer } from '../model';
 import { alignHorizontal, alignVertical, distributeEvenly, distributeWithGap, placeAdjacent, type Placeable } from '../tools/align';
 import { loadFiles } from '../io/load';
 import { exportMergedPaste } from '../gerber/exportGerber';
+import { exportMergedPasteSvg } from '../gerber/exportSvg';
 import { el, downloadText } from './dom';
 import type { Rotation90 } from '../gerber/geometry';
 
@@ -23,6 +24,7 @@ export class Sidebar {
   private readonly notify: () => void;
   private marginMm = 15;
   private gapMm = 5;
+  private kerfMm = 0;
 
   constructor(state: AppState, notify: () => void) {
     this.state = state;
@@ -360,6 +362,34 @@ export class Sidebar {
           },
         },
         ['Export merged paste Gerber'],
+      ),
+      el('label', { className: 'num-field' }, [
+        'Laser kerf (mm)',
+        helpIcon('Laser beam width. Each pad in the SVG is shrunk by half this value per side so the cut hole ends up at the true pad size. 0 = exact pad sizes.'),
+        el('input', {
+          type: 'number',
+          value: String(this.kerfMm),
+          step: '0.01',
+          min: '0',
+          oninput: (e: Event) => (this.kerfMm = Math.max(0, Number((e.target as HTMLInputElement).value) || 0)),
+        }),
+      ]),
+      el(
+        'button',
+        {
+          onclick: () => {
+            if (this.state.designs.length === 0) {
+              this.setStatus('Load at least one design first.');
+              return;
+            }
+            const result = exportMergedPasteSvg(this.state.designs, this.state.exportSide, this.kerfMm);
+            const filename = `merged-paste-${this.state.exportSide}.svg`;
+            downloadText(filename, result.text, 'image/svg+xml');
+            const parts = [`Exported ${filename} (${result.padCount} pads).`, ...result.warnings];
+            this.setStatus(parts.join(' '));
+          },
+        },
+        ['Export SVG for laser cutting'],
       ),
     ]);
   }

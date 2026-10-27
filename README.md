@@ -31,7 +31,10 @@ once loaded.
 - **Distribute**: select several designs and space them with a fixed gap, or
   evenly between the first and last.
 - **Export**: pick top or bottom paste and click Export to download the
-  merged Gerber.
+  merged Gerber, or "Export SVG for laser cutting" for a true-scale SVG of
+  pad outlines (red hairlines, no fill) to cut stencil film on a laser. The
+  "Laser kerf" field shrinks each pad by half the beam width so the cut
+  hole matches the real pad size.
 
 ## Development
 
@@ -62,6 +65,9 @@ is needed even if the repo is renamed or forked.
   circle/rectangle/obround flashes get real, deduplicated apertures; any
   other shape (irregular polygons, macro-derived pads, holes) is written as
   an equivalent filled region.
+- `src/gerber/exportSvg.ts` renders the same merged geometry as SVG outlines;
+  circles/rectangles are exact, everything else is flattened to polygons and
+  inset by the kerf with `clipper-lib`.
 - `src/tools/align.ts` holds the pure align/distribute math, decoupled from
   the UI so it's unit-tested directly.
 - `src/render/workspace.ts` is a hand-rolled pan/zoom/drag SVG canvas;

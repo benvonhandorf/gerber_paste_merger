@@ -1,3 +1,4 @@
+import type { ImageTree } from '@tracespace/plotter';
 import type { Design } from '../model';
 import { effectivePasteLayer, flipMirrorX, physicalPasteSide } from '../model';
 import { transformImage } from './transform';
@@ -17,7 +18,7 @@ export interface ExportResult {
  * upside-down on the panel still lines up with the rest of this side's
  * stencil.
  */
-export function exportMergedPaste(designs: Design[], side: 'top' | 'bottom'): ExportResult {
+export function placeMergedPaste(designs: Design[], side: 'top' | 'bottom'): { image: ImageTree; warnings: string[] } {
   const warnings: string[] = [];
   const placed = [];
   for (const design of designs) {
@@ -33,7 +34,11 @@ export function exportMergedPaste(designs: Design[], side: 'top' | 'bottom'): Ex
     placed.push(transformImage(layer.image, design.rotation, design.x, design.y, mirrorX));
   }
 
-  const merged = mergeImages(placed);
+  return { image: mergeImages(placed), warnings };
+}
+
+export function exportMergedPaste(designs: Design[], side: 'top' | 'bottom'): ExportResult {
+  const { image: merged, warnings } = placeMergedPaste(designs, side);
   const text = writeGerber(merged.children, {
     fileFunction: { type: 'Paste', side: side === 'top' ? 'Top' : 'Bot' },
     generationSoftware: { vendor: 'GerberPasteMerger', application: 'GerberPasteMerger', version: '1.0.0' },

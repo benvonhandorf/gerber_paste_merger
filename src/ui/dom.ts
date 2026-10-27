@@ -26,8 +26,8 @@ export function el<K extends keyof HTMLElementTagNameMap>(
   return node;
 }
 
-export function downloadText(filename: string, text: string): void {
-  const blob = new Blob([text], { type: 'application/octet-stream' });
+export function downloadText(filename: string, text: string, mime = 'application/octet-stream'): void {
+  const blob = new Blob([text], { type: mime });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
